@@ -4,8 +4,7 @@
 
 - user can pay using either of the two methods or both at once.
 - when a user pays with PAYPAL, they will be redirected to PayPal's website where they can enter their details (
-//kucuk yaglar 10 buyuk yaglar yuzde 20
-// superkritik 30
+ 
 */
 // Concrete strategy for PayPal
 class PayPal {

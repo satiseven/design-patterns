@@ -20,7 +20,8 @@ enum PaymentMethod {
   
   // Online Getaway interface
   interface OnlineGetaway extends Payment {
-    setGetawayInfo(info: string): void;
+    // setGetawayInfo(info: string): void;
+    getGetawayInfo(): void;
   }
   
   // Pay at the Door by Cash
@@ -38,11 +39,31 @@ enum PaymentMethod {
       // Additional logic for paying at the door by card
     }
   }
-  
+   class BankStatement implements Payment {
+    pay(amount: number): void {
+      console.log(`Paid ${amount} via bank statement.`);
+      // Additional logic for bank statement
+    }
+  }
   // Paytr Getaway
-  class Paytr implements OnlineGetaway {
-    private getawayInfo: string = '';
   
+
+  abstract class AbstractOnlineGetaway implements OnlineGetaway {
+    abstract getawayInfo: string ;
+  
+    getGetawayInfo(): void {
+        console.log('Gateway information: ' + this.getawayInfo);
+    }
+   
+  
+    pay(amount: number): void {
+      console.log(`Paid ${amount}. Getaway info: ${this.getawayInfo}`);
+      // Additional logic for the specific getaway
+    }
+  }
+
+  class Paytr extends AbstractOnlineGetaway {
+     getawayInfo: string="Paytr";
     setGetawayInfo(info: string): void {
       this.getawayInfo = info;
     }
@@ -52,20 +73,12 @@ enum PaymentMethod {
       // Additional logic for Paytr getaway
     }
   }
-  class BankStatement implements Payment {
-    pay(amount: number): void {
-      console.log(`Paid ${amount} via bank statement.`);
-      // Additional logic for bank statement
-    }
-  }
+ 
   // Iyzico Getaway
-  class Iyzico implements OnlineGetaway {
-    private getawayInfo: string = '';
-  
-    setGetawayInfo(info: string): void {
-      this.getawayInfo = info;
-    }
-  
+  class Iyzico   extends AbstractOnlineGetaway {
+    getawayInfo: string="Izyco";
+   
+    
     pay(amount: number): void {
       console.log(`Paid ${amount} via Iyzico. Getaway info: ${this.getawayInfo}`);
       // Additional logic for Iyzico getaway
@@ -73,8 +86,8 @@ enum PaymentMethod {
   }
   
   // Isbank Getaway
-  class Isbank implements OnlineGetaway {
-    private getawayInfo: string = '';
+  class Isbank extends AbstractOnlineGetaway {
+    getawayInfo: string="Isbank";
   
     setGetawayInfo(info: string): void {
       this.getawayInfo = info;

@@ -28,10 +28,26 @@ class PayAtDoorCard {
         // Additional logic for paying at the door by card
     }
 }
+class BankStatement {
+    pay(amount) {
+        console.log(`Paid ${amount} via bank statement.`);
+        // Additional logic for bank statement
+    }
+}
 // Paytr Getaway
-class Paytr {
+class AbstractOnlineGetaway {
+    getGetawayInfo() {
+        console.log('Gateway information: ' + this.getawayInfo);
+    }
+    pay(amount) {
+        console.log(`Paid ${amount}. Getaway info: ${this.getawayInfo}`);
+        // Additional logic for the specific getaway
+    }
+}
+class Paytr extends AbstractOnlineGetaway {
     constructor() {
-        this.getawayInfo = '';
+        super(...arguments);
+        this.getawayInfo = "Paytr";
     }
     setGetawayInfo(info) {
         this.getawayInfo = info;
@@ -41,19 +57,11 @@ class Paytr {
         // Additional logic for Paytr getaway
     }
 }
-class BankStatement {
-    pay(amount) {
-        console.log(`Paid ${amount} via bank statement.`);
-        // Additional logic for bank statement
-    }
-}
 // Iyzico Getaway
-class Iyzico {
+class Iyzico extends AbstractOnlineGetaway {
     constructor() {
-        this.getawayInfo = '';
-    }
-    setGetawayInfo(info) {
-        this.getawayInfo = info;
+        super(...arguments);
+        this.getawayInfo = "Izyco";
     }
     pay(amount) {
         console.log(`Paid ${amount} via Iyzico. Getaway info: ${this.getawayInfo}`);
@@ -61,9 +69,10 @@ class Iyzico {
     }
 }
 // Isbank Getaway
-class Isbank {
+class Isbank extends AbstractOnlineGetaway {
     constructor() {
-        this.getawayInfo = '';
+        super(...arguments);
+        this.getawayInfo = "Isbank";
     }
     setGetawayInfo(info) {
         this.getawayInfo = info;
