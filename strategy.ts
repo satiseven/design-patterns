@@ -1,20 +1,21 @@
 /*
-- payment system that supports PAYPAL and STRIPE
+- Paymethods system that supports PAYPAL and STRIPE
 
 - user can pay using either of the two methods or both at once.
 - when a user pays with PAYPAL, they will be redirected to PayPal's website where they can enter their details (
-
+//kucuk yaglar 10 buyuk yaglar yuzde 20
+// superkritik 30
 */
 
  
 
-// Interface for payment methods
-interface PaymentMethod {
+// Interface for Paymethods methods
+interface IPaymethodsMethod {
     pay(amount: number): void;
 }
 
 // Concrete strategy for PayPal
-class PayPal implements PaymentMethod {
+class PayPal implements IPaymethodsMethod {
     pay(amount: number): void {
         console.log(`Paid $${amount} via PayPal.`);
         // Additional logic for redirecting to PayPal's website
@@ -22,41 +23,41 @@ class PayPal implements PaymentMethod {
 }
 
 // Concrete strategy for Stripe
-class Stripe implements PaymentMethod {
+class Stripe implements IPaymethodsMethod {
     pay(amount: number): void {
         console.log(`Paid $${amount} via Stripe.`);
-        // Additional logic for processing payment with Stripe
+        // Additional logic for processing Paymethods with Stripe
     }
 }
 
-// Context class that uses the payment strategy
-class Payment {
-    private paymentMethod: PaymentMethod;
+// Context class that uses the Paymethods strategy
+class Paymethodsd {
+    private PaymethodsMethod: IPaymethodsMethod;
 
-    constructor(paymentMethod: PaymentMethod) {
-        this.paymentMethod = paymentMethod;
+    constructor(PaymethodsMethod: IPaymethodsMethod) {
+        this.PaymethodsMethod = PaymethodsMethod;
     }
 
-    // Setter method to change the payment strategy dynamically
-    setPaymentMethod(paymentMethod: PaymentMethod): void {
-        this.paymentMethod = paymentMethod;
+    // Setter method to change the Paymethods strategy dynamically
+    setPaymethodsMethod(PaymethodsMethod: IPaymethodsMethod): void {
+        this.PaymethodsMethod = PaymethodsMethod;
     }
 
-    // Method to perform the payment using the selected strategy
-    performPayment(amount: number): void {
-        this.paymentMethod.pay(amount);
+    // Method to perform the Paymethods using the selected strategy
+    performPaymethods(amount: number): void {
+        this.PaymethodsMethod.pay(amount);
     }
 }
 
 // Client code
-const paypalPayment = new PayPal();
-const stripePayment = new Stripe();
+const paypalPaymethods = new PayPal();
+const stripePaymethods = new Stripe();
 
-const payment = new Payment(paypalPayment);
+const Paymethods = new Paymethodsd(paypalPaymethods);
 
-// Performing payment using the current strategy (PayPal)
-payment.performPayment(100);
+// Performing Paymethods using the current strategy (PayPal)
+Paymethods.performPaymethods(100);
 
-// Switching to a different payment strategy (Stripe)
-payment.setPaymentMethod(stripePayment);
-payment.performPayment(50);
+// Switching to a different Paymethods strategy (Stripe)
+Paymethods.setPaymethodsMethod(stripePaymethods);
+Paymethods.performPaymethods(50);
