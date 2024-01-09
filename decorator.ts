@@ -1,60 +1,61 @@
-// DiscountInterface.ts
-interface DiscountInterface {
-    calculateDiscount(price: number): number;
-}
-
-// BaseDiscount.ts
-class BaseDiscount implements DiscountInterface {
-    calculateDiscount(price: number): number {
-        return price;
+// Component interface
+interface Coffee {
+    cost(): number;
+    description(): string;
+  }
+  
+  // Concrete Component
+  class SimpleCoffee implements Coffee {
+    cost() {
+      return 5;
     }
-}
-
-// TwoPlusOneDiscount.ts
-class TwoPlusOneDiscount implements DiscountInterface {
-    private nextDiscount: DiscountInterface;
-
-    constructor(nextDiscount: DiscountInterface) {
-        this.nextDiscount = nextDiscount;
+  
+    description() {
+      return 'Simple Coffee';
     }
-
-    calculateDiscount(price: number): number {
-        // Logic for 2+1 discount here
-        // You can modify the price based on the discount rules
-
-        // Delegate the calculation to the next discount in the chain
-        return this.nextDiscount.calculateDiscount(price);
+  }
+  
+  // Decorator abstract class
+  abstract class CoffeeDecorator implements Coffee {
+    protected coffee: Coffee;
+  
+    constructor(coffee: Coffee) {
+      this.coffee = coffee;
     }
-}
-
-// PercentageDiscount.ts
-class PercentageDiscount implements DiscountInterface {
-    private nextDiscount: DiscountInterface;
-    private percentage: number;
-
-    constructor(nextDiscount: DiscountInterface, percentage: number) {
-        this.nextDiscount = nextDiscount;
-        this.percentage = percentage;
+  
+    abstract cost(): number;
+    abstract description(): string;
+  }
+  
+  // Concrete Decorator 1
+  class MilkDecorator extends CoffeeDecorator {
+    cost() {
+      return this.coffee.cost() + 2;
     }
-
-    calculateDiscount(price: number): number {
-        // Logic for percentage discount here
-        // You can modify the price based on the discount rules
-
-        // Delegate the calculation to the next discount in the chain
-        return this.nextDiscount.calculateDiscount(price-price/this.percentage);
+  
+    description() {
+      return this.coffee.description() + ', Milk';
     }
-}
-
-// Example of usage
-const initialPrice = 100;
-
-const baseDiscount = new BaseDiscount();
-const twoPlusOneDiscount = new TwoPlusOneDiscount(baseDiscount);
-const percentageDiscount = new PercentageDiscount(twoPlusOneDiscount, 10);
-
-// Calculate the final price by chaining the discounts
-const finalPrice = percentageDiscount.calculateDiscount(initialPrice);
-console.log(finalPrice);
-
-// finalPrice now contains the discounted price based on the configured decorators
+  }
+  
+  // Concrete Decorator 2
+  class SugarDecorator extends CoffeeDecorator {
+    cost() {
+      return this.coffee.cost() + 1;
+    }
+  
+    description() {
+      return this.coffee.description() + ', Sugar';
+    }
+  }
+  
+  // Example usage
+  const simpleCoffee: Coffee = new SimpleCoffee();
+  console.log(`Cost: $${simpleCoffee.cost()}, Description: ${simpleCoffee.description()}`);
+  
+  const milkCoffee: Coffee = new MilkDecorator(simpleCoffee);
+  console.log(`Cost: $${milkCoffee.cost()}, Description: ${milkCoffee.description()}`);
+  
+  const sugarMilkCoffee: Coffee = new SugarDecorator(milkCoffee);
+  console.log(`Cost: $${sugarMilkCoffee.cost()}, Description: ${sugarMilkCoffee.description()}`);
+  

@@ -27,6 +27,7 @@ class LightOffCommand implements Command {
     execute(): void {
         this.light.turnOff();
     }
+    
 }
 
 // Receiver: Light
@@ -40,7 +41,7 @@ class Light {
     }
 }
 
-// Invoker: RemoteController
+// Invoker: RemoteController    
 class RemoteController {
     private command!: Command;
 

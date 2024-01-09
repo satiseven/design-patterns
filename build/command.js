@@ -26,7 +26,7 @@ class Light {
         console.log("Light is OFF");
     }
 }
-// Invoker: RemoteController
+// Invoker: RemoteController    
 class RemoteController {
     setCommand(command) {
         this.command = command;

@@ -1,41 +1,41 @@
 "use strict";
-// BaseDiscount.ts
-class BaseDiscount {
-    calculateDiscount(price) {
-        return price;
+// Concrete Component
+class SimpleCoffee {
+    cost() {
+        return 5;
+    }
+    description() {
+        return 'Simple Coffee';
     }
 }
-// TwoPlusOneDiscount.ts
-class TwoPlusOneDiscount {
-    constructor(nextDiscount) {
-        this.nextDiscount = nextDiscount;
-    }
-    calculateDiscount(price) {
-        // Logic for 2+1 discount here
-        // You can modify the price based on the discount rules
-        // Delegate the calculation to the next discount in the chain
-        return this.nextDiscount.calculateDiscount(price);
+// Decorator abstract class
+class CoffeeDecorator {
+    constructor(coffee) {
+        this.coffee = coffee;
     }
 }
-// PercentageDiscount.ts
-class PercentageDiscount {
-    constructor(nextDiscount, percentage) {
-        this.nextDiscount = nextDiscount;
-        this.percentage = percentage;
+// Concrete Decorator 1
+class MilkDecorator extends CoffeeDecorator {
+    cost() {
+        return this.coffee.cost() + 2;
     }
-    calculateDiscount(price) {
-        // Logic for percentage discount here
-        // You can modify the price based on the discount rules
-        // Delegate the calculation to the next discount in the chain
-        return this.nextDiscount.calculateDiscount(price - price / this.percentage);
+    description() {
+        return this.coffee.description() + ', Milk';
     }
 }
-// Example of usage
-const initialPrice = 100;
-const baseDiscount = new BaseDiscount();
-const twoPlusOneDiscount = new TwoPlusOneDiscount(baseDiscount);
-const percentageDiscount = new PercentageDiscount(twoPlusOneDiscount, 10);
-// Calculate the final price by chaining the discounts
-const finalPrice = percentageDiscount.calculateDiscount(initialPrice);
-console.log(finalPrice);
-// finalPrice now contains the discounted price based on the configured decorators
+// Concrete Decorator 2
+class SugarDecorator extends CoffeeDecorator {
+    cost() {
+        return this.coffee.cost() + 1;
+    }
+    description() {
+        return this.coffee.description() + ', Sugar';
+    }
+}
+// Example usage
+const simpleCoffee = new SimpleCoffee();
+console.log(`Cost: $${simpleCoffee.cost()}, Description: ${simpleCoffee.description()}`);
+const milkCoffee = new MilkDecorator(simpleCoffee);
+console.log(`Cost: $${milkCoffee.cost()}, Description: ${milkCoffee.description()}`);
+const sugarMilkCoffee = new SugarDecorator(milkCoffee);
+console.log(`Cost: $${sugarMilkCoffee.cost()}, Description: ${sugarMilkCoffee.description()}`);
