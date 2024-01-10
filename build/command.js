@@ -1,46 +1,50 @@
 "use strict";
-// ConcreteCommand: LightOnCommand
-class LightOnCommand {
-    constructor(light) {
-        this.light = light;
+// Concrete command: Job
+class Job {
+    constructor(task, delay = 0) {
+        this.task = task;
+        this.delay = delay;
     }
     execute() {
-        this.light.turnOn();
+        setTimeout(() => {
+            this.task();
+        }, this.delay);
     }
 }
-// ConcreteCommand: LightOffCommand
-class LightOffCommand {
-    constructor(light) {
-        this.light = light;
+// Invoker: JobQueue
+class JobQueue {
+    constructor() {
+        this.queue = [];
     }
-    execute() {
-        this.light.turnOff();
+    enqueue(command) {
+        this.queue.push(command);
     }
-}
-// Receiver: Light
-class Light {
-    turnOn() {
-        console.log("Light is ON");
-    }
-    turnOff() {
-        console.log("Light is OFF");
-    }
-}
-// Invoker: RemoteController    
-class RemoteController {
-    setCommand(command) {
-        this.command = command;
-    }
-    pressButton() {
-        this.command.execute();
+    processQueue() {
+        const executeNext = () => {
+            if (this.queue.length > 0) {
+                const command = this.queue.shift();
+                if (command) {
+                    command.execute();
+                    executeNext();
+                }
+            }
+        };
+        executeNext();
     }
 }
 // Client code
-const light = new Light();
-const lightOnCommand = new LightOnCommand(light);
-const lightOffCommand = new LightOffCommand(light);
-const remote = new RemoteController();
-remote.setCommand(lightOnCommand);
-remote.pressButton(); // Light is ON
-remote.setCommand(lightOffCommand);
-remote.pressButton(); // Light is OFF
+const jobQueue = new JobQueue();
+// Define some tasks with delays
+const task1 = () => console.log("Task 1");
+const task2 = () => console.log("Task 2");
+const task3 = () => console.log("Task 3");
+// Create command objects (jobs) with delays
+const command1 = new Job(task1, 1000); // 1-second delay
+const command2 = new Job(task2, 2000); // 2-second delay
+const command3 = new Job(task3, 500); // 0.5-second delay
+// Enqueue commands
+jobQueue.enqueue(command1);
+jobQueue.enqueue(command2);
+jobQueue.enqueue(command3);
+// Execute the jobs in the queue with delays
+jobQueue.processQueue();
