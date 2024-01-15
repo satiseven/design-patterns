@@ -17,22 +17,21 @@ class Jober implements Command {
   }
 }
 
-class jobInvoker{
-    queue: Array<Command> = [];
-    addJob(j: Command): void {
-        this.queue.push(j);
-    }
-   private invokeNextJob(job:Command): void {
-  job.execute();
-
-    }
-    proccessQueue(){
-        this.queue.map(q=>this.invokeNextJob(q))
-    }
+class jobInvoker {
+  queue: Array<Command> = []
+  addJob(j: Command): void {
+    this.queue.push(j)
+  }
+  private invokeNextJob(job: Command): void {
+    job.execute()
+  }
+  proccessQueue() {
+    this.queue.map((q) => this.invokeNextJob(q))
+  }
 }
 
-let jI=new jobInvoker;
-jI.addJob(new Jober(()=>console.log("Hello World")));
-jI.addJob(new Jober(()=>console.log("Hello World2")));
+let jI = new jobInvoker()
+jI.addJob(new Jober(() => console.log('Hello World')))
+jI.addJob(new Jober(() => console.log('Hello World2')))
 
-jI.proccessQueue(); 
+jI.proccessQueue()

@@ -6,6 +6,7 @@ class Singleton {
         console.log("class created");
         
     }
+ 
 
     static singletonCreator(): Singleton {
         if (this.singletonInstance === null) {
