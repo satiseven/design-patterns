@@ -1,4 +1,3 @@
- 
 interface Cammand {
     execute():void;
 }

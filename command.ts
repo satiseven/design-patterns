@@ -12,7 +12,7 @@ interface Command {
       this.task = task;
       this.delay = delay;
     }
-  
+                                                                                                                                                                                                                            
     execute(): void {
       setTimeout(() => {
         this.task();

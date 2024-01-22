@@ -23,7 +23,7 @@ class jobInvoker {
     this.queue.push(j)
   }
   private invokeNextJob(job: Command): void {
-    job.execute()
+    job.execute() 
   }
   proccessQueue() {
     this.queue.map((q) => this.invokeNextJob(q))
