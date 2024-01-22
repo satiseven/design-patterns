@@ -21,10 +21,10 @@ class jobInvoker {
         job.execute();
     }
     proccessQueue() {
-        this.queue.map(q => this.invokeNextJob(q));
+        this.queue.map((q) => this.invokeNextJob(q));
     }
 }
-let jI = new jobInvoker;
-jI.addJob(new Jober(() => console.log("Hello World")));
-jI.addJob(new Jober(() => console.log("Hello World2")));
+let jI = new jobInvoker();
+jI.addJob(new Jober(() => console.log('Hello World')));
+jI.addJob(new Jober(() => console.log('Hello World2')));
 jI.proccessQueue();
