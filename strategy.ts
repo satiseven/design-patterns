@@ -29,7 +29,7 @@ class Stripe implements IPaymethodsMethod {
     }
 }
 
-// Context class that uses the Paymethods strategy
+// Context class that uses the Paym ethods strategy
 class Paymethodsd {
     private PaymethodsMethod: IPaymethodsMethod;
 
