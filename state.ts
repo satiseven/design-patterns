@@ -1,31 +1,5 @@
-interface OrderStatus {
-    id: number;
-    name: string;
-    trackingNumber(): string;
-  }
-  
-  class OrderStateMachine {
-    private _currentState: OrderStatus;
-    private _states: StateRegistry;
-  
-    constructor(initial: OrderStatus) {
-      this._currentState = initial;
-      this._states = new StateRegistry(); // Register possible states here
-    }
-  
-    changeState(nextState: OrderStatus): void {
-      if (!this._states.has(nextState)) {
-        throw new Error(`Invalid state transition to ${nextState.name}`);
-      }
-      this._currentState = nextState;
-    }
-  
-    getTrackingNumber(): string {
-      return this._currentState.trackingNumber();
-    }
-  }
-  
-  class StateRegistry {
+// Define StateRegistry first to avoid circular dependency
+class StateRegistry {
     private _states: Map<OrderStatus, any>;
   
     constructor() {
@@ -37,7 +11,36 @@ interface OrderStatus {
     }
   
     has(state: OrderStatus): boolean {
+  
+       
       return this._states.has(state);
+    }
+  }
+  
+  interface OrderStatus {
+    id: number;
+    name: string;
+    trackingNumber(): string;
+  }
+  
+  class OrderStateMachine {
+    private _currentState: OrderStatus;
+    private _states: StateRegistry;
+  
+    constructor(initial: OrderStatus, states: StateRegistry) {
+      this._currentState = initial;
+      this._states = states; // Assign the provided StateRegistry instance
+    }
+  
+    changeState(nextState: OrderStatus): void {
+    if (!this._states.has(nextState)) {
+        throw new Error(`Invalid state transition to ${nextState.name}`);
+      }
+      this._currentState = nextState;
+    }
+  
+    getTrackingNumber(): string {
+      return this._currentState.trackingNumber();
     }
   }
   
@@ -56,6 +59,7 @@ interface OrderStatus {
       return "The order has been confirmed, but it has not yet been delivered to the post office";
     }
   }
+  
   class InvalidState implements OrderStatus {
     id: number = -1;
     name: string = "Invalid";
@@ -63,25 +67,29 @@ interface OrderStatus {
       throw new Error("This order is in an invalid state and cannot have a tracking number");
     }
   }
+  const orderConfirmedState = new OrderConfirmed();
   // Example usage:
   const stateRegistry = new StateRegistry();
   stateRegistry.register(new Shipped());
-  stateRegistry.register(new OrderConfirmed());
+  stateRegistry.register(orderConfirmedState);
+  const invalidState=new InvalidState();
   
-  const orderStateMachine = new OrderStateMachine(new Shipped());
+  const orderStateMachine = new OrderStateMachine(new Shipped(), stateRegistry); // Pass the stateRegistry
+  
   console.log(orderStateMachine.getTrackingNumber()); // "Tracking Number is 123456789"
   
-  orderStateMachine.changeState(new OrderConfirmed());
+  orderStateMachine.changeState(orderConfirmedState);
   console.log(orderStateMachine.getTrackingNumber()); // "The order has been confirmed..."
   
   // Try changing to an unregistered state (throws error)
   try {
-    orderStateMachine.changeState(new InvalidState()); // Assuming InvalidState is not registered
+    orderStateMachine.changeState(invalidState); // Assuming InvalidState is not registered
   } catch (error) {
     if (typeof error === 'string') {
         console.log(error.toUpperCase()); // error is now a string
       } else if (error instanceof Error) {
         console.error(error.message); // error is now an Error object
       }
- 
+      
   }
+  
